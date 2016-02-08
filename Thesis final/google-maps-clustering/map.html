@@ -1,0 +1,215 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>Google Maps</title>
+	<link rel="stylesheet" href="includes/css/main.css" type="text/css" />
+	<link rel="stylesheet" href="includes/css/jquery-ui-1.8rc3.custom.css" type="text/css" />
+<!-- <script language="JavaScript" type="text/javascript" src="includes/js/map.js"></script> -->
+
+	<!--Script tag for google maps-->
+  	<script type="text/javascript"
+      	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCiRknQTJhy065CxLGgZDKGVvkjDdrmtJA&sensor=false">
+   </script>
+	  <script src="jquery.min.js"></script>
+  <script src="gmap.js"></script>
+  <script src="mapster-0.1.1.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+
+	<script type="text/javascript" src="includes/js/jquery-1.7.2.min.js"></script> 
+	<!--Script tag for Clustering effect-->  
+   <script type="text/javascript" src="includes/js/markerclusterer_packed.js"> </script>
+   <script type="text/javascript" src="includes/js/jquery-ui-1.8rc3.custom.min.js"> </script>
+   <!--Script tag for example json file-->
+   <script type="text/javascript" src="data9.json"> </script>   
+ 	<!--Script tag for loading of the map page-->
+	<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+
+   <script type="text/javascript">
+  
+  
+	//function initializes automatically on loading the page 
+	
+function initialize() {
+	    var zoom = 3;
+	    var latlng = new google.maps.LatLng(37.4419, -100.1419);
+	    var location = "Showing default location for map.";
+
+    // If ClientLocation was filled in by the loader, use that info instead
+    
+    	if (google.loader.ClientLocation) {
+    	  zoom = 13;
+    	  latlng = new google.maps.LatLng(google.loader.ClientLocation.latitude, google.loader.ClientLocation.longitude);
+    	  location = "Showing IP-based location: <b>" + getFormattedLocation() + "</b>";
+   	 }
+
+		//variable to set the map display
+		   
+    	var myOptions = {
+				zoom: zoom,
+				streetViewControl:false,
+				panControl:false,
+   			zoomControl:true,
+   			zoomControlOptions: {
+      				style:google.maps.ZoomControlStyle.SMALL
+   			 },
+    		  center: latlng,
+    		  mapTypeId: google.maps.MapTypeId.ROADMAP
+  		  }
+  
+  		//map object creation
+  	  	map = new google.maps.Map(document.getElementById("map"),myOptions);
+  	  	
+  	  	//variable for displaying the custom icons based on the state in the json file
+
+		var customIcons = {
+    	  CA: {
+     		   icon: 'includes/images/1.png',
+    		   shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
+  		  },
+   	  MA: {
+    		   icon: 'includes/images/2.png',
+        		shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
+    	  },
+     	  TX: {
+       		icon: 'includes/images/brand.png',
+        		shadow: 'http://labs.google.com/ridefinder/images/mm_20_shadow.png'
+      	}
+    	};
+       
+      var markers = [];
+      
+      //loop for the json file data to be marked in the positions that is included in the script tag
+      
+		for (var i = 0, length = data.photos.length; i < length; i++) {
+      
+          var dataPhoto = data.photos[i];//Assigning the json data(Location)
+          var latLng = new google.maps.LatLng(dataPhoto.latitude,dataPhoto.longitude); // Providing latitude and longitude for that particular json data
+			 var state = dataPhoto.state_province;//Assigning state whether it is a branded ,promoted etc
+			 var icon =  customIcons[state] || {}; // calling the custom Icons variable based on the state
+
+			 //var contentString = dataPhoto.title ; //Assigning the title to be displayed on clicking the icon 
+			
+			 var contentString = [
+     						 '<div id="tabs">',
+      					  '<ul>',
+      						  '<li><a href="#tab-1"><span>Station Info</span></a></li>',
+      						  '<li><a href="#tab-2" img src="images/EV.jpg" ></span></a></li>',
+       					  '</ul>',
+      						'<div id="tab-1">',
+      								 dataPhoto.title ,
+      						'</div>',
+     							'<div id="tab-2">',
+       								'<p>Call Now:xxx.xxx.xxxx</p><br>',
+       								'<p>Hours: Always open</p>',
+       								'<p>[name]</p>',
+       								'<p>Price</p>',
+       								'<p>[date][time]</p>',
+       								'<p>[phone]</p>',
+       								'<p>[text box(2lines):what are you looking for?]</p>',
+     							'</div>',
+    						 '</div>'
+   			 ].join('');
+		
+			//marker variable for displaying the locations in the place of markers           
+          var marker = new google.maps.Marker({
+          	  position: latLng,
+				  map: map,
+       		  //zIndex: Math.round(latLng.lat()*-100000)<<5,        
+				  icon: icon.icon,
+        		  shadow: icon.shadow
+          });
+
+			//Calling function for displaying of popup (content) on clicking the marker		 
+		 	attachIWindow(contentString, marker);
+ 			 
+         markers.push(marker);
+       } //end of for loop
+       
+        var markerCluster = new MarkerClusterer(map, markers);
+} // end of initialize function
+	  
+	//Execute the initialize() function that constructs the Map object on window load
+	  
+   google.maps.event.addDomListener(window, 'load', initialize);
+
+
+//function for calling the location on loading the page
+
+function getFormattedLocation() {
+    if (google.loader.ClientLocation.address.country_code == "US" &&
+      	google.loader.ClientLocation.address.region) {
+    			  return google.loader.ClientLocation.address.city + ", " 
+        		  + google.loader.ClientLocation.address.region.toUpperCase();
+    } else {
+      		  return  google.loader.ClientLocation.address.city + ", "
+          		+ google.loader.ClientLocation.address.country_code;
+    }
+}
+
+//function for calling information window on clicking the marker
+
+function attachIWindow(content, marker){
+			
+		  //object creation for the information window		
+        var infowindow = new google.maps.InfoWindow({
+            content: content
+          });
+       	
+        google.maps.event.addListener(infowindow, 'domready', function() {
+     			 $("#tabs").tabs();
+   	  });
+        
+        //eventlistner for opening of information window on clicking the marker
+        google.maps.event.addListener(marker, 'click', function(){
+            infowindow.open(map, marker);
+        });
+         
+    }
+
+</script> 
+</head>
+
+
+
+<body>
+  <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+    <script type="text/javascript">
+        google.maps.event.addDomListener(window, 'load', function () {
+            var places = new google.maps.places.Autocomplete(document.getElementById('txtPlaces'));
+            google.maps.event.addListener(places, 'place_changed', function () {
+                var place = places.getPlace();
+                var address = place.formatted_address;
+                var latitude = place.geometry.location.A;
+                var longitude = place.geometry.location.F;
+                var mesg = "Address: " + address;
+                mesg += "\nLatitude: " + latitude;
+                mesg += "\nLongitude: " + longitude;
+                alert(mesg);
+            });
+        });
+    </script>
+  <!--   <span>Location:</span>
+   <input i="text" id="address" style="width: 250px" placeholder="Enter a location" />
+
+<!-- <h2>Type</h2>
+  <input type="checkbox" name="venue_type" value="awesome" checked>Awesome
+  <input type="checkbox" name="venue_type" value="romantic" checked>Romantic
+  <input type="checkbox" name="venue_type" value="boring" checked>Boring
+
+  <h2>Dog friendly?</h2>
+  <input type="checkbox" name="venue_dog_friendly" value="yes" checked>Yes
+  <input type="checkbox" name="venue_dog_friendly" value="no" checked>No
+-->
+  <h2> EV Charging Stations in USA : <span id="total-result"></span> </h2>
+    
+    <div id="map-container">
+<div style="height:8%;"></div>
+    
+    <div id="map"></div>
+    
+    </div>
+     
+     </div>
+  </body>
+</html>

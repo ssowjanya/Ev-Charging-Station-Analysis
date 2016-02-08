@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>amCharts examples</title>
+        <link rel="stylesheet" href="style.css" type="text/css">
+        <script src="../amcharts/amcharts.js" type="text/javascript"></script>
+        <script src="../amcharts/pie.js" type="text/javascript"></script>
+
+        <script>
+
+            AmCharts.makeChart("chartdiv", {
+                "type": "pie",
+                "dataProvider": [{
+                    "state": "California",
+                        "outlets": 5881
+                }, {
+                    "state": "Texas",
+                        "outlets": 1474
+                }, {
+                    "state": "washington",
+                        "outlets": 1227
+                }, {
+                    "state": "florida",
+                        "outlets": 1144
+                }, {
+                    "state": "New York",
+                        "outlets": 952
+                }, {
+                    "state": "Oregon",
+                        "outlets": 864
+                }, {
+                    "state": "Tennessee",
+                        "outlets": 733
+         }, {
+                    "state": "Michigan",
+                        "outlets": 709
+                }, {
+                
+                    "state": "Arizona",
+                        "outlets": 693
+                }, {
+                
+                    "state": "Maryland",
+                        "outlets": 593
+       
+						}],
+                "titleField": "state",
+                "valueField": "outlets",
+                "balloonText": "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
+                "legend": {
+                    "align": "center",
+                    "markerType": "circle"
+                }
+
+            });
+
+        </script>
+    </head>
+
+    <body>
+        <div id="chartdiv" style="width: 100%; height: 400px;"></div>
+    </body>
+
+</html>

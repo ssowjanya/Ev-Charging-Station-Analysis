@@ -1,0 +1,24 @@
+.thumbnails {
+    padding: 10px;
+}
+.thumbnail {
+    float:left;
+    position:relative;
+    width: 170px;
+    height: 130px;
+    margin-right: 10px;
+}
+.thumbnail img{
+    
+    width:150px;
+    height:110px;
+}    
+
+.thumbnail:hover img {
+    position:relative;
+    top:-180%;
+    width:550px;
+    height:350px;
+    display:block;
+    z-index:100;
+}

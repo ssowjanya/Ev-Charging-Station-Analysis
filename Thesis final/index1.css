@@ -1,0 +1,100 @@
+#i_header {
+
+/*color:black;*/
+text-align:center;
+padding:0px;
+font-family: Lucida Blackletter;
+font-size: 25px;
+}
+#vertmenu {
+position: fixed;
+top: 0;
+left: 0;
+width: 50px;
+background-color: black;
+opacity: 0.7;
+height: 100%;
+    overflow-y: auto;
+}
+
+#mainPicture
+{
+clear:both;
+width:1064px;
+height:345px;
+background-color:#160306;
+
+}
+
+#mainPicture .picture
+{
+position:relative;
+width:1044px;
+height:325px;
+top:10px;
+margin-left:10px;
+background-image:url(../images/EV.jpg);
+background-size: cover;
+}
+#vertmenu {
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size: 100%;
+padding: 0px;
+margin-left: 10px;
+min-width: 180px;
+
+}
+
+#vertmenu ul {
+list-style: none;
+margin: 20%;
+padding: 20px;
+border: none;
+
+
+}
+#vertmenu ul li {
+margin: 0px 0px 0px 0px;
+padding: 0px;
+
+}
+#vertmenu ul li a {
+font-size: 100%;
+display: block;
+padding: 0px 0px 50% 0px;
+text-decoration: none;
+color: #989ba2;
+
+}
+
+#vertmenu ul li a:hover, #vertmenu ul li a:focus {
+color: white;
+
+}
+.div2{ padding-left: 240px;}
+
+bl {
+  animation-duration: 1000ms;
+  animation-name: tgle;
+  animation-iteration-count: infinite;
+}
+
+@keyframes tgle {
+  0% {
+    opacity: 0;
+  }
+
+  49.99% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+
+  99.99% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
